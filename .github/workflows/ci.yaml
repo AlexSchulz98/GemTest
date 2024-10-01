@@ -9,6 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  IMAGE_NAME: ahd-deid-recommender-test
 
 jobs:
   build-and-push-image:
@@ -25,8 +26,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }} # automatically generated
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./inception_ahd_recommender
-          push: true
+      - name: Build Docker image using docker-compose
+        run: docker compose -f inception_ahd_recommender/docker-compose.yml build ahd-deid-recommender
+
+      - name: Extract Image Tag
+        run: |
+          TAG=$(grep 'image:' inception_ahd_recommender/docker-compose.yml | awk -F':' '{print $2}')
+          echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Tag and Push Docker Image
+        run: |
+          docker tag ahd-deid-recommender:${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ github.repository }}/ahd-deid-recommender:${{ env.IMAGE_TAG }}
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/ahd-deid-recommender:${{ env.IMAGE_TAG }}
