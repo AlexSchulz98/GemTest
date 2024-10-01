@@ -1,0 +1,24 @@
+services:
+  ahd-deid-recommender:
+    build:
+      context: .
+    image: ahd-deid-recommender:1.1.1
+    restart: unless-stopped
+    environment:
+      - EXTERNAL_SERVER_ADDRESS=http://198.168.10.2:8080
+      - EXTERNAL_SERVER_TOKEN=a72c80319b27199d81c939c210a646ca8d1aa76840a0cda62a6a91dc192ab7dd
+      - PIPELINE_PROJECT=GeMTeX
+      - PIPELINE_NAME=deid
+      - CONSUMER=ariadne.contrib.external_server_consumer.MappingConsumer::/inception_ahd_recommender/prefab-mapping-files/deid_mapping_singlelayer.json
+      - SERVER_HANDLE=deid_recommender
+      - MODEL_DIR=/models
+      - RECOMMENDER_WORKERS=4
+      - RECOMMENDER_ADDRESS=:5000
+    ports:
+      - 5000:5000
+    networks:
+      - recommender-network
+networks:
+  recommender-network:
+    external: true
+    name: recommender-network
