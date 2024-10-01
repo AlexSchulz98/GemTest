@@ -16,4 +16,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker compose -f  inception_ahd_recommender/docker-compose.yml build ahd-deid-recommender
+        run: docker compose -f inception_ahd_recommender/docker-compose.yml build ahd-deid-recommender
