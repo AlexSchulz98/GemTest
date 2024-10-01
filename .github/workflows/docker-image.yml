@@ -1,0 +1,33 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main #disable
+    paths:
+      - inception_ahd_recommender/**
+
+env:
+  IMAGE_NAME: inception-ahd-recommender
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Extract image tag from docker-compose.yml
+      id: extract-tag
+      run: |
+        # Extract version from docker-compose.yml
+        TAG=$(grep 'image: ahd-deid-recommender' inception_ahd_recommender/docker-compose.yml | sed 's/.*://')
+        echo "Extracted tag: $TAG"
+        if [ -z "$TAG" ]; then
+          echo "Tag extraction failed, using default tag 'latest'."
+          TAG="latest"
+        fi
+        echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+    - name: Build Docker image
+      run: docker build . --file inception_ahd_recommender/Dockerfile --tag $IMAGE_NAME:$TAG
