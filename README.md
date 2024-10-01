@@ -1,7 +1,7 @@
 # GeMTeX
 
 Dieses Repositorium umfasst  Arbeiten (v.a. Code) zum Projekt [GeMTeX](https://www.smith.care/de/gemtex_mii/ueber-gemtex/), 
-die nicht gut im Projekt-[Confluence](https://confluence.imi.med.fau.de) abgelegt werden können..
+die nicht gut im Projekt-[Confluence](https://confluence.imi.med.fau.de) abgelegt werden können.
 
 ### [`averbis-custom-configs`](https://github.com/medizininformatik-initiative/GeMTeX/tree/main/averbis-custom-configs)
 Verschiedene Konfigurationen (`json` Format), mit denen `AHD` Pipelines angepasst werden können.
