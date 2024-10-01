@@ -20,7 +20,6 @@ jobs:
       packages: write
       attestations: write
       id-token: write
-      actions: read
 
     steps:
       - name: Checkout repository
@@ -33,9 +32,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }} # automatically generated
 
-      - name: Get version from file
-        id: version
-        run: echo "version=$(cat inception_ahd_recommender/VERSION)" >> $GITHUB_OUTPUT
+      - name: Set variables
+        run: |
+          VER=$(cat VERSION)
+          echo "VERSION=$VER" >> $GITHUB_ENV
       
       # TODO: Releases. Ansonsten wird hier der Tag auf Basis von Commit und Branch generiert.
       - name: Extract tags
@@ -50,4 +50,4 @@ jobs:
         with:
           context: ./inception_ahd_recommender
           push: true
-          tags: ${{ steps.version.outputs.version }}
+          tags: ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
