@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - inception_ahd_recommender/**
+      - inception_ahd_recommender/VERSION
 
 env:
   REGISTRY: ghcr.io
