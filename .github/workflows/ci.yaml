@@ -3,7 +3,7 @@ name: Build and publish Inception-AHD-Recommender
 on:
   push:
     branches:
-      - master
+      - main #disable
     paths:
       - inception_ahd_recommender/**
 
