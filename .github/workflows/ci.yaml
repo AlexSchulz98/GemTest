@@ -41,7 +41,7 @@ jobs:
         run: echo "VERSION=$(cat inception_ahd_recommender/VERSION)" >> $GITHUB_ENV
 
       - name: Print version
-        run: echo "Current version is ${{ steps.version.outputs.version }}"
+        run: echo "Current version is ${{ env.VERSION }}"
         
       - name: Extract tags
         id: meta
@@ -55,4 +55,4 @@ jobs:
         with:
           context: ./inception_ahd_recommender
           push: true
-          tags: $IMAGE_NAME:$VERSION
+          tags: ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
