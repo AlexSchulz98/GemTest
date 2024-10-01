@@ -32,13 +32,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }} # automatically generated
 
-      # - name: downcase IMAGE_NAME
-      #   run: |
-      #     echo "IMAGE_NAME=${IMAGE_NAME,,}" >>${GITHUB_ENV}
+      - name: downcase IMAGE_NAME
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >>${GITHUB_ENV}
 
       - name: Get version from file
         id: version
-        run: echo "version=$(cat inception_ahd_recommender/VERSION)" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(cat inception_ahd_recommender/VERSION)" >> $GITHUB_ENV
 
       - name: Print version
         run: echo "Current version is ${{ steps.version.outputs.version }}"
@@ -55,4 +55,4 @@ jobs:
         with:
           context: ./inception_ahd_recommender
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: $IMAGE_NAME:$VERSION
