@@ -34,7 +34,7 @@ jobs:
 
       - name: Set variables
         run: |
-          VER=$(cat VERSION)
+          VER=$(cat inception_ahd_recommender/VERSION)
           echo "VERSION=$VER" >> $GITHUB_ENV
       
       # TODO: Releases. Ansonsten wird hier der Tag auf Basis von Commit und Branch generiert.
