@@ -39,20 +39,22 @@ jobs:
       - name: Get version from file
         id: version
         run: echo "VERSION=$(cat inception_ahd_recommender/VERSION)" >> $GITHUB_ENV
-
-      - name: Print version
-        run: echo "Current version is ${{ env.VERSION }}"
         
-      # - name: Extract tags
-      #   id: meta
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+      - name: Extract tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
         with:
           context: ./inception_ahd_recommender
           push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} 
+          
+          # Probleme:
+          # IMAGE_NAME original geht nicht weil Großbuchstaben
+          # IMAGE_NAME so wie jetzt geht nicht weil stimmt nicht mehr --> access denied
+          # using ${{ steps.verion.outputs.version }} --> geht nicht weil image_name fehlt
