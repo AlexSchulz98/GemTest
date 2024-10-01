@@ -1,19 +1,25 @@
-name: Build Inception-AHD-Recommender
+name: Build and publish Inception-AHD-Recommender
 
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - inception_ahd_recommender/**
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ahd-deid-recommender
+  IMAGE_NAME: inception-ahd-recommender
 
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -24,17 +30,18 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # automatically generated
+          password: ${{ secrets.GITHUB_TOKEN }} # automatically generiert
 
-      - name: Build Docker image using docker-compose
-        run: docker compose -f inception_ahd_recommender/docker-compose.yml build ahd-deid-recommender
-
-      - name: Extract Image Tag
+      - name: Extract image tag from docker-compose.yml
+        id: extract-tag
         run: |
-          TAG=$(grep 'image:' inception_ahd_recommender/docker-compose.yml | awk -F':' '{print $2}')
+          # Extract version from docker-compose.yml
+          TAG=$(grep 'image: ahd-deid-recommender' docker-compose.yml | sed 's/.*://')
           echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
 
-      - name: Tag and Push Docker Image
-        run: |
-          docker tag ahd-deid-recommender:${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ github.repository }}/ahd-deid-recommender:${{ env.IMAGE_TAG }}
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}/ahd-deid-recommender:${{ env.IMAGE_TAG }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./inception_ahd_recommender
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
