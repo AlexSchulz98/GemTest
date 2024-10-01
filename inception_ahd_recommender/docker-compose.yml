@@ -22,4 +22,3 @@ networks:
   recommender-network:
     external: true
     name: recommender-network
-    
