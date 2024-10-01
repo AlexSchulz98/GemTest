@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - main #disable
+      - master
     paths:
       - inception_ahd_recommender/**
 
